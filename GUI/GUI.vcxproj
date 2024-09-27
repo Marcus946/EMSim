@@ -78,7 +78,7 @@
       <AdditionalIncludeDirectories>C:\Qt\6.7.2\msvc2019_64\include\QtOpenGL;C:\Qt\6.7.2\msvc2019_64\include\QtOpenGLWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(QTDIR)\lib\Qt6OpenGLWidgetsd.lib;$(QTDIR)\lib\Qt6OpenGLd.lib;$(QTDIR)\lib\Qt6Widgetsd.lib;$(QTDIR)\lib\Qt6Cored.lib;$(QTDIR)\lib\Qt6Cored.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(QTDIR)\lib\Qt6OpenGLWidgetsd.lib;$(QTDIR)\lib\Qt6OpenGLd.lib;$(QTDIR)\lib\Qt6Widgetsd.lib;$(QTDIR)\lib\Qt6Cored.lib;$(QTDIR)\lib\Qt6Guid.lib;$(QTDIR)\lib\Qt6Guid.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -86,7 +86,7 @@
       <AdditionalIncludeDirectories>C:\Qt\6.7.2\msvc2019_64\include\QtOpenGL;C:\Qt\6.7.2\msvc2019_64\include\QtOpenGLWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(QTDIR)\lib\Qt6OpenGLWidgetsd.lib;$(QTDIR)\lib\Qt6OpenGLd.lib;$(QTDIR)\lib\Qt6Widgetsd.lib;$(QTDIR)\lib\Qt6Cored.lib;$(QTDIR)\lib\Qt6Widgets.lib;$(QTDIR)\lib\Qt6Core.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(QTDIR)\lib\Qt6OpenGLWidgetsd.lib;$(QTDIR)\lib\Qt6OpenGLd.lib;$(QTDIR)\lib\Qt6Widgetsd.lib;$(QTDIR)\lib\Qt6Cored.lib;$(QTDIR)\lib\Qt6Guid.lib;$(QTDIR)\lib\Qt6Guid.dll;$(QTDIR)\lib\Qt6Widgets.lib;$(QTDIR)\lib\Qt6Core.lib;$(QTDIR)\lib\Qt6Gui.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
