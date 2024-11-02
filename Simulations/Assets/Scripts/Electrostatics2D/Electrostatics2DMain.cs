@@ -9,6 +9,7 @@ public class Electrostatics2DMain : MonoBehaviour
     public Camera mCamera;
 
     private VectorField mVectorField;
+    private FieldLines mFieldLines;
     private List<PointCharge> mPointCharges;
     private int mSelectedChargeIndex = -1;
     private float mTimeSinceLastTick = 0.0f;
@@ -21,7 +22,9 @@ public class Electrostatics2DMain : MonoBehaviour
         mPointCharges = new List<PointCharge>();
 
         Vector2 camBounds = new Vector2(mCamera.orthographicSize * mCamera.aspect, mCamera.orthographicSize);
-        mVectorField = new VectorField(mCamera.transform.position, camBounds, Vector2.one);
+        mVectorField = new VectorField(camBounds, Vector2.one);
+
+        mFieldLines = new FieldLines(camBounds, 10, 0.1f);
     }
 
     void Update()
@@ -52,6 +55,11 @@ public class Electrostatics2DMain : MonoBehaviour
         if (mTimeSinceLastTick >= 1.0f / TicksPerSecond) {
             Tick();
         }
+
+        // mph change controlstruct once it's used
+        mVectorField.Update(new Electrostatics2D(), mPointCharges);
+
+        mFieldLines.Update(mPointCharges);
     }
 
     void Tick()
@@ -62,9 +70,6 @@ public class Electrostatics2DMain : MonoBehaviour
         if (success) {
             ReassignPointChargeGameObjects(PointCharge.DeserializeList(buffer));
         }
-
-        // mph change controlstruct once it's used
-        mVectorField.Update(new Electrostatics2D(), mPointCharges);
 
         WriteSimToSharedMemory();
 
@@ -78,7 +83,7 @@ public class Electrostatics2DMain : MonoBehaviour
 
         if (deltaChargeCount < 0) {
             while (mPointCharges.Count > newCharges.Count) {
-                mPointCharges[0].DestroyGameObject();
+                mPointCharges[0].Destroy();
                 mPointCharges.RemoveAt(0);
             }
         }

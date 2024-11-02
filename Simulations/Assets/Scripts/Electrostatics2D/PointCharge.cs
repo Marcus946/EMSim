@@ -107,7 +107,7 @@ public class PointCharge
         return mGameObject == null;
     }
 
-    public void DestroyGameObject()
+    public void Destroy()
     {
         GameObject.Destroy(mGameObject);
         mGameObject = null;

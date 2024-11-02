@@ -32,7 +32,7 @@ public class VectorField
 
         public Mesh mMesh;
         public ArrowSizeStruct mArrowSizes;
-        public Vector2 mPos;
+        public Vector2 mPosition;
 
         public struct ArrowSizeStruct
         {
@@ -57,7 +57,7 @@ public class VectorField
             mMesh.vertices = mVertexTemplate;
             mMesh.triangles = mIndices;
 
-            mPos = pos;
+            mPosition = pos;
 
             Update(magnitude, 0.0f);
 
@@ -74,7 +74,7 @@ public class VectorField
 
             mArrowSizes = MagnitudeToArrowSize(magnitude);
 
-            Vector3 pos = mPos;
+            Vector3 pos = mPosition;
 
             for (int i = 0; i < mVertexTemplate.Length; i++) {
                 Vector3 vertex = mVertexTemplate[i];
@@ -116,7 +116,7 @@ public class VectorField
 
         private Vector2 RotateVertex(Vector2 vertex, float angleRad)
         {
-            vertex -= mPos;
+            vertex -= mPosition;
 
             float r = MathF.Sqrt((vertex.x * vertex.x) + (vertex.y * vertex.y));
             float newAngle = Mathf.Atan2(vertex.y, vertex.x) + angleRad;
@@ -124,7 +124,7 @@ public class VectorField
             vertex.y = r * MathF.Sin(newAngle);
             vertex.x = r * MathF.Cos(newAngle);
 
-            return vertex + mPos;
+            return vertex + mPosition;
         }
 
         private ArrowSizeStruct MagnitudeToArrowSize(float magnitude)
@@ -137,13 +137,17 @@ public class VectorField
         }
     }
 
+    public const float ElectricFieldScaleFactor = 8e-8f;
+
     public float mDirectionRad = Mathf.PI;
     public float mMagnitude = 0;
 
     private Arrow[] mArrows;
     private GameObject mObject;
 
-    public VectorField(Vector2 camOrigin, Vector2 camBounds, Vector2 vectorDensity)
+    public VectorField(
+        Vector2 camBounds,
+        Vector2 vectorDensity)
     {
         int columnCnt = Mathf.CeilToInt(2 * camBounds.x * vectorDensity.x);
         int rowCnt = Mathf.CeilToInt(2 * camBounds.y * vectorDensity.y);
@@ -174,11 +178,14 @@ public class VectorField
         ControlStructs.Electrostatics2D controls,
         List<PointCharge> pointCharges = null)
     {
-        float magnitude = 1.5f - Mathf.Sin(2.0f * Time.time);
-        // float angle = Time.time % (2.0f * MathF.PI);
-
         for (int i = 0; i < mArrows.Length; i++) {
-            mArrows[i].Update(magnitude, 0.0f);
+            if (pointCharges == null) {
+                mArrows[i].Update(1.0f, 0.0f);
+            }
+            Vector3 ef = ElectrostaticCalculations.ElectricField(ref pointCharges, mArrows[i].mPosition);
+            float magnitude = Math.Min(ef.magnitude, 1.25f);
+            float angle = Mathf.Atan2(ef.y, ef.x);
+            mArrows[i].Update(magnitude, angle);
         }
 
         Mesh totalMesh = Arrow.CombineAllMeshes(mArrows);
